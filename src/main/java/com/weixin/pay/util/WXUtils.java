@@ -45,13 +45,11 @@ public class WXUtils {
 
     /**
      * 获取微信全局accessToken
-     * 测试环境只能通过生产接口调用获取accessToken 不然会存在accessToken相互覆盖 导致互相不可用
      *
-     * @param code
-     * @return
-     * @throws Exception
+     * @param code 标识
+     * @return accessToken
      */
-    public String getAccessToken(String code) throws Exception {
+    public String getAccessToken(String code) {
 
         // 取redis数据
         String key = WXConstants.WECHAT_ACCESSTOKEN + code;
