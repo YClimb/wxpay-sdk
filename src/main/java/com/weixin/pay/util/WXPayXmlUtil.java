@@ -13,7 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * @author yclimb
  * @date 2018/8/17
  */
-public final class WxPayXmlUtil {
+public final class WXPayXmlUtil {
 
     /**
      * 生成一个微信的xml文档

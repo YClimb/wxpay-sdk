@@ -8,7 +8,7 @@ import java.io.InputStream;
  * @author yclimb
  * @date 2018/8/17
  */
-public abstract class WxPayConfig {
+public abstract class WXPayConfig {
 
     /**
      * 获取 App ID
@@ -61,7 +61,7 @@ public abstract class WxPayConfig {
      *
      * @return IWXPayDomain
      */
-    abstract WxPayDomain getWXPayDomain();
+    abstract WXPayDomain getWXPayDomain();
 
     /**
      * 是否自动上报。

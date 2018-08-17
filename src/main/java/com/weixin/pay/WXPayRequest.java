@@ -1,6 +1,6 @@
 package com.weixin.pay;
 
-import com.weixin.pay.util.WxPayUtil;
+import com.weixin.pay.util.WXPayUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -25,7 +25,7 @@ import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
-import static com.weixin.pay.constants.WxPayConstants.USER_AGENT;
+import static com.weixin.pay.constants.WXPayConstants.USER_AGENT;
 
 /**
  * 微信支付请求类
@@ -33,10 +33,10 @@ import static com.weixin.pay.constants.WxPayConstants.USER_AGENT;
  * @author yclimb
  * @date 2018/8/17
  */
-public class WxPayRequest {
-    private WxPayConfig config;
+public class WXPayRequest {
+    private WXPayConfig config;
 
-    public WxPayRequest(WxPayConfig config) throws Exception {
+    public WXPayRequest(WXPayConfig config) throws Exception {
 
         this.config = config;
     }
@@ -123,19 +123,19 @@ public class WxPayRequest {
     private String request(String urlSuffix, String uuid, String data, int connectTimeoutMs, int readTimeoutMs, boolean useCert, boolean autoReport) throws Exception {
         Exception exception = null;
         long elapsedTimeMillis = 0;
-        long startTimestampMs = WxPayUtil.getCurrentTimestampMs();
+        long startTimestampMs = WXPayUtil.getCurrentTimestampMs();
         boolean firstHasDnsErr = false;
         boolean firstHasConnectTimeout = false;
         boolean firstHasReadTimeout = false;
-        WxPayDomain.DomainInfo domainInfo = config.getWXPayDomain().getDomain(config);
+        WXPayDomain.DomainInfo domainInfo = config.getWXPayDomain().getDomain(config);
         if (domainInfo == null) {
             throw new Exception("WXPayConfig.getWXPayDomain().getDomain() is empty or null");
         }
         try {
             String result = requestOnce(domainInfo.domain, urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, useCert);
-            elapsedTimeMillis = WxPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
             config.getWXPayDomain().report(domainInfo.domain, elapsedTimeMillis, null);
-            WxPayReport.getInstance(config).report(
+            WXPayReport.getInstance(config).report(
                     uuid,
                     elapsedTimeMillis,
                     domainInfo.domain,
@@ -149,9 +149,9 @@ public class WxPayRequest {
         } catch (UnknownHostException ex) {  // dns 解析错误，或域名不存在
             exception = ex;
             firstHasDnsErr = true;
-            elapsedTimeMillis = WxPayUtil.getCurrentTimestampMs() - startTimestampMs;
-            WxPayUtil.getLogger().warn("UnknownHostException for domainInfo {}", domainInfo);
-            WxPayReport.getInstance(config).report(
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            WXPayUtil.getLogger().warn("UnknownHostException for domainInfo {}", domainInfo);
+            WXPayReport.getInstance(config).report(
                     uuid,
                     elapsedTimeMillis,
                     domainInfo.domain,
@@ -165,9 +165,9 @@ public class WxPayRequest {
         } catch (ConnectTimeoutException ex) {
             exception = ex;
             firstHasConnectTimeout = true;
-            elapsedTimeMillis = WxPayUtil.getCurrentTimestampMs() - startTimestampMs;
-            WxPayUtil.getLogger().warn("connect timeout happened for domainInfo {}", domainInfo);
-            WxPayReport.getInstance(config).report(
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            WXPayUtil.getLogger().warn("connect timeout happened for domainInfo {}", domainInfo);
+            WXPayReport.getInstance(config).report(
                     uuid,
                     elapsedTimeMillis,
                     domainInfo.domain,
@@ -181,9 +181,9 @@ public class WxPayRequest {
         } catch (SocketTimeoutException ex) {
             exception = ex;
             firstHasReadTimeout = true;
-            elapsedTimeMillis = WxPayUtil.getCurrentTimestampMs() - startTimestampMs;
-            WxPayUtil.getLogger().warn("timeout happened for domainInfo {}", domainInfo);
-            WxPayReport.getInstance(config).report(
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            WXPayUtil.getLogger().warn("timeout happened for domainInfo {}", domainInfo);
+            WXPayReport.getInstance(config).report(
                     uuid,
                     elapsedTimeMillis,
                     domainInfo.domain,
@@ -195,8 +195,8 @@ public class WxPayRequest {
                     firstHasReadTimeout);
         } catch (Exception ex) {
             exception = ex;
-            elapsedTimeMillis = WxPayUtil.getCurrentTimestampMs() - startTimestampMs;
-            WxPayReport.getInstance(config).report(
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            WXPayReport.getInstance(config).report(
                     uuid,
                     elapsedTimeMillis,
                     domainInfo.domain,

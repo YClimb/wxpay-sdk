@@ -1,8 +1,8 @@
 package com.weixin.pay;
 
-import com.weixin.pay.util.WxPayUtil;
-import com.weixin.pay.constants.WxPayConstants;
-import com.weixin.pay.constants.WxPayConstants.SignType;
+import com.weixin.pay.util.WXPayUtil;
+import com.weixin.pay.constants.WXPayConstants;
+import com.weixin.pay.constants.WXPayConstants.SignType;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -14,39 +14,39 @@ import java.util.Map;
  * @author yclimb
  * @date 2018/8/17
  */
-public class WxPay {
+public class WXPay {
 
-    private WxPayConfig config;
+    private WXPayConfig config;
     private SignType signType;
     private boolean autoReport;
     private boolean useSandbox;
     private String notifyUrl;
-    private WxPayRequest wxPayRequest;
+    private WXPayRequest wxPayRequest;
 
-    public WxPay(final WxPayConfig config) throws Exception {
+    public WXPay(final WXPayConfig config) throws Exception {
         this(config, null, true, false);
         // this(config, null, true, true);
     }
 
-    public WxPay(final WxPayConfig config, final boolean autoReport) throws Exception {
+    public WXPay(final WXPayConfig config, final boolean autoReport) throws Exception {
         this(config, null, autoReport, false);
         // this(config, null, autoReport, true);
     }
 
 
-    public WxPay(final WxPayConfig config, final boolean autoReport, final boolean useSandbox) throws Exception{
+    public WXPay(final WXPayConfig config, final boolean autoReport, final boolean useSandbox) throws Exception{
         this(config, null, autoReport, useSandbox);
     }
 
-    public WxPay(final WxPayConfig config, final String notifyUrl) throws Exception {
+    public WXPay(final WXPayConfig config, final String notifyUrl) throws Exception {
         this(config, notifyUrl, true, false);
     }
 
-    public WxPay(final WxPayConfig config, final String notifyUrl, final boolean autoReport) throws Exception {
+    public WXPay(final WXPayConfig config, final String notifyUrl, final boolean autoReport) throws Exception {
         this(config, notifyUrl, autoReport, false);
     }
 
-    public WxPay(final WxPayConfig config, final String notifyUrl, final boolean autoReport, final boolean useSandbox) throws Exception {
+    public WXPay(final WXPayConfig config, final String notifyUrl, final boolean autoReport, final boolean useSandbox) throws Exception {
         this.config = config;
         this.notifyUrl = notifyUrl;
         this.autoReport = autoReport;
@@ -57,7 +57,7 @@ public class WxPay {
         else {
             this.signType = SignType.MD5; // 此处原来不是MD5！！！
         }
-        this.wxPayRequest = new WxPayRequest(config);
+        this.wxPayRequest = new WXPayRequest(config);
     }
 
     private void checkWXPayConfig() throws Exception {
@@ -97,14 +97,14 @@ public class WxPay {
     public Map<String, String> fillRequestData(Map<String, String> reqData) throws Exception {
         reqData.put("appid", config.getAppID());
         reqData.put("mch_id", config.getMchID());
-        reqData.put("nonce_str", WxPayUtil.generateNonceStr());
+        reqData.put("nonce_str", WXPayUtil.generateNonceStr());
         if (SignType.MD5.equals(this.signType)) {
-            reqData.put("sign_type", WxPayConstants.MD5);
+            reqData.put("sign_type", WXPayConstants.MD5);
         }
         else if (SignType.HMACSHA256.equals(this.signType)) {
-            reqData.put("sign_type", WxPayConstants.HMACSHA256);
+            reqData.put("sign_type", WXPayConstants.HMACSHA256);
         }
-        reqData.put("sign", WxPayUtil.generateSignature(reqData, config.getKey(), this.signType));
+        reqData.put("sign", WXPayUtil.generateSignature(reqData, config.getKey(), this.signType));
         return reqData;
     }
 
@@ -117,7 +117,7 @@ public class WxPay {
      */
     public boolean isResponseSignatureValid(Map<String, String> reqData) throws Exception {
         // 返回数据的签名方式和请求中给定的签名方式是一致的
-        return WxPayUtil.isSignatureValid(reqData, this.config.getKey(), this.signType);
+        return WXPayUtil.isSignatureValid(reqData, this.config.getKey(), this.signType);
     }
 
     /**
@@ -128,7 +128,7 @@ public class WxPay {
      * @throws Exception
      */
     public boolean isPayResultNotifySignatureValid(Map<String, String> reqData) throws Exception {
-        String signTypeInData = reqData.get(WxPayConstants.FIELD_SIGN_TYPE);
+        String signTypeInData = reqData.get(WXPayConstants.FIELD_SIGN_TYPE);
         SignType signType;
         if (signTypeInData == null) {
             signType = SignType.MD5;
@@ -138,17 +138,17 @@ public class WxPay {
             if (signTypeInData.length() == 0) {
                 signType = SignType.MD5;
             }
-            else if (WxPayConstants.MD5.equals(signTypeInData)) {
+            else if (WXPayConstants.MD5.equals(signTypeInData)) {
                 signType = SignType.MD5;
             }
-            else if (WxPayConstants.HMACSHA256.equals(signTypeInData)) {
+            else if (WXPayConstants.HMACSHA256.equals(signTypeInData)) {
                 signType = SignType.HMACSHA256;
             }
             else {
                 throw new Exception(String.format("Unsupported sign_type: %s", signTypeInData));
             }
         }
-        return WxPayUtil.isSignatureValid(reqData, this.config.getKey(), signType);
+        return WXPayUtil.isSignatureValid(reqData, this.config.getKey(), signType);
     }
 
 
@@ -164,7 +164,7 @@ public class WxPay {
     public String requestWithoutCert(String urlSuffix, Map<String, String> reqData,
                                      int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String msgUUID = reqData.get("nonce_str");
-        String reqBody = WxPayUtil.mapToXml(reqData);
+        String reqBody = WXPayUtil.mapToXml(reqData);
 
         String resp = this.wxPayRequest.requestWithoutCert(urlSuffix, msgUUID, reqBody, connectTimeoutMs, readTimeoutMs, autoReport);
         return resp;
@@ -183,7 +183,7 @@ public class WxPay {
     public String requestWithCert(String urlSuffix, Map<String, String> reqData,
                                   int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String msgUUID= reqData.get("nonce_str");
-        String reqBody = WxPayUtil.mapToXml(reqData);
+        String reqBody = WXPayUtil.mapToXml(reqData);
 
         String resp = this.wxPayRequest.requestWithCert(urlSuffix, msgUUID, reqBody, connectTimeoutMs, readTimeoutMs, this.autoReport);
         return resp;
@@ -209,7 +209,7 @@ public class WxPay {
     public Map<String, String> processResponseXml(String xmlStr, boolean isFlag) throws Exception {
         String RETURN_CODE = "return_code";
         String return_code;
-        Map<String, String> respData = WxPayUtil.xmlToMap(xmlStr);
+        Map<String, String> respData = WXPayUtil.xmlToMap(xmlStr);
         if (respData.containsKey(RETURN_CODE)) {
             return_code = respData.get(RETURN_CODE);
         }
@@ -217,10 +217,10 @@ public class WxPay {
             throw new Exception(String.format("No `return_code` in XML: %s", xmlStr));
         }
 
-        if (return_code.equals(WxPayConstants.FAIL)) {
+        if (return_code.equals(WXPayConstants.FAIL)) {
             return respData;
         }
-        else if (return_code.equals(WxPayConstants.SUCCESS)) {
+        else if (return_code.equals(WXPayConstants.SUCCESS)) {
             // 如果isFlag为false，则不需要进行sign校验
             if (!isFlag) {
                 return respData;
@@ -261,10 +261,10 @@ public class WxPay {
     public Map<String, String> microPay(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_MICROPAY_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_MICROPAY_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.MICROPAY_URL_SUFFIX;
+            url = WXPayConstants.MICROPAY_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -296,7 +296,7 @@ public class WxPay {
         Exception lastException = null;
 
         while (true) {
-            startTimestampMs = WxPayUtil.getCurrentTimestampMs();
+            startTimestampMs = WXPayUtil.getCurrentTimestampMs();
             int readTimeoutMs = remainingTimeMs - connectTimeoutMs;
             if (readTimeoutMs > 1000) {
                 try {
@@ -311,12 +311,12 @@ public class WxPay {
                         else {
                             // 看错误码，若支付结果未知，则重试提交刷卡支付
                             if (errCode.equals("SYSTEMERROR") || errCode.equals("BANKERROR") || errCode.equals("USERPAYING")) {
-                                remainingTimeMs = remainingTimeMs - (int)(WxPayUtil.getCurrentTimestampMs() - startTimestampMs);
+                                remainingTimeMs = remainingTimeMs - (int)(WXPayUtil.getCurrentTimestampMs() - startTimestampMs);
                                 if (remainingTimeMs <= 100) {
                                     break;
                                 }
                                 else {
-                                    WxPayUtil.getLogger().info("microPayWithPos: try micropay again");
+                                    WXPayUtil.getLogger().info("microPayWithPos: try micropay again");
                                     if (remainingTimeMs > 5*1000) {
                                         Thread.sleep(5*1000);
                                     }
@@ -364,10 +364,10 @@ public class WxPay {
     public Map<String, String> sendRedPack(Map<String, String> reqData) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_SENDREDPACK_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_SENDREDPACK_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.SENDREDPACK_URL_SUFFIX;
+            url = WXPayConstants.SENDREDPACK_URL_SUFFIX;
         }
         String respXml = this.requestWithCert(url, this.redPackRequestData(reqData), config.getHttpConnectTimeoutMs(), this.config.getHttpReadTimeoutMs());
         return this.processResponseXml(respXml);
@@ -376,8 +376,8 @@ public class WxPay {
     public Map<String, String> redPackRequestData(Map<String, String> reqData) throws Exception {
         reqData.put("wxappid", config.getAppID());
         reqData.put("mch_id", config.getMchID());
-        reqData.put("nonce_str", WxPayUtil.generateUUID());
-        reqData.put("sign", WxPayUtil.generateSignature(reqData, config.getKey(), this.signType));
+        reqData.put("nonce_str", WXPayUtil.generateUUID());
+        reqData.put("sign", WXPayUtil.generateSignature(reqData, config.getKey(), this.signType));
         return reqData;
     }
 
@@ -392,20 +392,20 @@ public class WxPay {
     public Map<String, String> transfers(Map<String, String> reqData) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_TRANSFERS_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_TRANSFERS_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.TRANSFERS_URL_SUFFIX;
+            url = WXPayConstants.TRANSFERS_URL_SUFFIX;
         }
         String respXml = this.requestWithCert(url, this.transfersRequestData(reqData), config.getHttpConnectTimeoutMs(), this.config.getHttpReadTimeoutMs());
         return this.processResponseXml(respXml, false);
     }
 
     public Map<String, String> transfersRequestData(Map<String, String> reqData) throws Exception {
-        reqData.put("mch_appid", WxPayConstants.APP_ID_XXX);
-        reqData.put("mchid", WxPayConstants.MCH_ID_XXX);
-        reqData.put("nonce_str", WxPayUtil.generateUUID());
-        reqData.put("sign", WxPayUtil.generateSignature(reqData, WxPayConstants.API_KEY_XXX, this.signType));
+        reqData.put("mch_appid", WXPayConstants.APP_ID_XXX);
+        reqData.put("mchid", WXPayConstants.MCH_ID_XXX);
+        reqData.put("nonce_str", WXPayUtil.generateUUID());
+        reqData.put("sign", WXPayUtil.generateSignature(reqData, WXPayConstants.API_KEY_XXX, this.signType));
         return reqData;
     }
 
@@ -434,10 +434,10 @@ public class WxPay {
     public Map<String, String> unifiedOrder(Map<String, String> reqData,  int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_UNIFIEDORDER_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_UNIFIEDORDER_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.UNIFIEDORDER_URL_SUFFIX;
+            url = WXPayConstants.UNIFIEDORDER_URL_SUFFIX;
         }
         if(this.notifyUrl != null) {
             reqData.put("notify_url", this.notifyUrl);
@@ -471,10 +471,10 @@ public class WxPay {
     public Map<String, String> orderQuery(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_ORDERQUERY_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_ORDERQUERY_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.ORDERQUERY_URL_SUFFIX;
+            url = WXPayConstants.ORDERQUERY_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -506,10 +506,10 @@ public class WxPay {
     public Map<String, String> reverse(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_REVERSE_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_REVERSE_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.REVERSE_URL_SUFFIX;
+            url = WXPayConstants.REVERSE_URL_SUFFIX;
         }
         String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -540,10 +540,10 @@ public class WxPay {
     public Map<String, String> closeOrder(Map<String, String> reqData,  int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_CLOSEORDER_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_CLOSEORDER_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.CLOSEORDER_URL_SUFFIX;
+            url = WXPayConstants.CLOSEORDER_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -575,10 +575,10 @@ public class WxPay {
     public Map<String, String> refund(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_REFUND_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_REFUND_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.REFUND_URL_SUFFIX;
+            url = WXPayConstants.REFUND_URL_SUFFIX;
         }
         String respXml = this.requestWithCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -609,10 +609,10 @@ public class WxPay {
     public Map<String, String> refundQuery(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_REFUNDQUERY_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_REFUNDQUERY_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.REFUNDQUERY_URL_SUFFIX;
+            url = WXPayConstants.REFUNDQUERY_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -645,21 +645,21 @@ public class WxPay {
     public Map<String, String> downloadBill(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_DOWNLOADBILL_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_DOWNLOADBILL_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.DOWNLOADBILL_URL_SUFFIX;
+            url = WXPayConstants.DOWNLOADBILL_URL_SUFFIX;
         }
         String respStr = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs).trim();
         Map<String, String> ret;
         // 出现错误，返回XML数据
         if (respStr.indexOf("<") == 0) {
-            ret = WxPayUtil.xmlToMap(respStr);
+            ret = WXPayUtil.xmlToMap(respStr);
         }
         else {
             // 正常返回csv数据
             ret = new HashMap<String, String>();
-            ret.put("return_code", WxPayConstants.SUCCESS);
+            ret.put("return_code", WXPayConstants.SUCCESS);
             ret.put("return_msg", "ok");
             ret.put("data", respStr);
         }
@@ -691,13 +691,13 @@ public class WxPay {
     public Map<String, String> report(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_REPORT_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_REPORT_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.REPORT_URL_SUFFIX;
+            url = WXPayConstants.REPORT_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
-        return WxPayUtil.xmlToMap(respXml);
+        return WXPayUtil.xmlToMap(respXml);
     }
 
 
@@ -723,10 +723,10 @@ public class WxPay {
     public Map<String, String> shortUrl(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_SHORTURL_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_SHORTURL_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.SHORTURL_URL_SUFFIX;
+            url = WXPayConstants.SHORTURL_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -757,10 +757,10 @@ public class WxPay {
     public Map<String, String> authCodeToOpenid(Map<String, String> reqData, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         String url;
         if (this.useSandbox) {
-            url = WxPayConstants.SANDBOX_AUTHCODETOOPENID_URL_SUFFIX;
+            url = WXPayConstants.SANDBOX_AUTHCODETOOPENID_URL_SUFFIX;
         }
         else {
-            url = WxPayConstants.AUTHCODETOOPENID_URL_SUFFIX;
+            url = WXPayConstants.AUTHCODETOOPENID_URL_SUFFIX;
         }
         String respXml = this.requestWithoutCert(url, this.fillRequestData(reqData), connectTimeoutMs, readTimeoutMs);
         return this.processResponseXml(respXml);
@@ -787,15 +787,15 @@ public class WxPay {
         Map<String, String> data = new HashMap<>();
 
         // 微信支付对象
-        WxPay wxPay = new WxPay(WxPayConfigImpl.getInstance());
+        WXPay wxPay = new WXPay(WXPayConfigImpl.getInstance());
 
         // 字段名	变量名	必填	类型	示例值	描述
         // 标价币种	fee_type	否	String(16)	CNY	符合ISO 4217标准的三位字母代码，默认人民币：CNY，详细列表请参见货币类型
-        data.put("fee_type", WxPayConstants.FEE_TYPE_CNY);
+        data.put("fee_type", WXPayConstants.FEE_TYPE_CNY);
         // 通知地址	notify_url	是	String(256)	http://www.weixin.qq.com/wxpay/pay.php	异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
         data.put("notify_url", notify_url);
         // 交易类型	trade_type	是	String(16)	JSAPI	小程序取值如下：JSAPI，详细说明见参数规定
-        data.put("trade_type", WxPayConstants.TRADE_TYPE);
+        data.put("trade_type", WXPayConstants.TRADE_TYPE);
         // 用户标识	openid	否	String(128)	oUpF8uMuAJO_M2pxb1Q9zNjWeS6o	trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。openid如何获取，可参考【获取openid】。
         data.put("openid", openid);
         // 商品描述	body	是	String(128)	腾讯充值中心-QQ会员充值 商品简单描述，该字段请按照规范传递，具体请见参数规定
@@ -841,7 +841,7 @@ public class WxPay {
         // 微信统一下单接口请求地址
         Map<String, String> resultMap = wxPay.unifiedOrder(data);
 
-        WxPayUtil.getLogger().info("wxPay.unifiedOrder:" + resultMap);
+        WXPayUtil.getLogger().info("wxPay.unifiedOrder:" + resultMap);
 
         return resultMap;
     }
@@ -860,19 +860,19 @@ public class WxPay {
 
         // 支付方法调用所需参数map
         Map<String, String> chooseWXPayMap = new HashMap<>();
-        chooseWXPayMap.put("appId", WxPayConstants.APP_ID);
-        chooseWXPayMap.put("timeStamp", String.valueOf(WxPayUtil.getCurrentTimestamp()));
+        chooseWXPayMap.put("appId", WXPayConstants.APP_ID);
+        chooseWXPayMap.put("timeStamp", String.valueOf(WXPayUtil.getCurrentTimestamp()));
         chooseWXPayMap.put("nonceStr", nonce_str);
         chooseWXPayMap.put("package", "prepay_id=" + prepay_id);
-        chooseWXPayMap.put("signType", WxPayConstants.MD5);
+        chooseWXPayMap.put("signType", WXPayConstants.MD5);
 
-        WxPayUtil.getLogger().info("wxPay.chooseWXPayMap:" + chooseWXPayMap.toString());
+        WXPayUtil.getLogger().info("wxPay.chooseWXPayMap:" + chooseWXPayMap.toString());
 
         // 生成支付签名
-        String paySign = WxPayUtil.generateSignature(chooseWXPayMap, WxPayConstants.API_KEY);
+        String paySign = WXPayUtil.generateSignature(chooseWXPayMap, WXPayConstants.API_KEY);
         chooseWXPayMap.put("paySign", paySign);
 
-        WxPayUtil.getLogger().info("wxPay.paySign:" + paySign);
+        WXPayUtil.getLogger().info("wxPay.paySign:" + paySign);
 
         return chooseWXPayMap;
     }
@@ -916,7 +916,7 @@ public class WxPay {
         // 退款原因	否	String(80)	商品已售完	若商户传入，会在下发给用户的退款消息中体现退款原因
         data.put("refund_desc", refund_desc);
         // 货币种类	否	String(8)	CNY	货币类型，符合ISO 4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
-        data.put("refund_fee_type", WxPayConstants.FEE_TYPE_CNY);
+        data.put("refund_fee_type", WXPayConstants.FEE_TYPE_CNY);
         // 退款结果通知url	否	String(256)	https://weixin.qq.com/notify/	异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数,如果参数中传了notify_url，则商户平台上配置的回调地址将不会生效。
         data.put("notify_url", notify_url);
 
@@ -938,12 +938,12 @@ public class WxPay {
 		data.put("sign", sign);*/
 
         // 微信支付对象
-        WxPay wxPay = new WxPay(WxPayConfigImpl.getInstance());
+        WXPay wxPay = new WXPay(WXPayConfigImpl.getInstance());
 
         // 微信退款接口
         Map<String, String> resultMap = wxPay.refund(data);
 
-        WxPayUtil.getLogger().info("wxPay.refund:" + resultMap);
+        WXPayUtil.getLogger().info("wxPay.refund:" + resultMap);
 
         return resultMap;
     }
@@ -987,12 +987,12 @@ public class WxPay {
         data.put("re_user_name", "xxx");*/
 
         // 微信支付对象
-        WxPay wxPay = new WxPay(XxxWxPayConfigImpl.getInstance());
+        WXPay wxPay = new WXPay(XxxWXPayConfigImpl.getInstance());
 
         // 微信调用接口
         Map<String, String> resultMap = wxPay.transfers(data);
 
-        WxPayUtil.getLogger().info("wxPay.transfers:" + resultMap);
+        WXPayUtil.getLogger().info("wxPay.transfers:" + resultMap);
 
         return resultMap;
     }

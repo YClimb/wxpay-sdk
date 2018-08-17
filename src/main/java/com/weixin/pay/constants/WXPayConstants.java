@@ -8,7 +8,7 @@ import org.apache.http.client.HttpClient;
  * @author yclimb
  * @date 2018/8/17
  */
-public class WxPayConstants {
+public class WXPayConstants {
 
     /**
      * 异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。

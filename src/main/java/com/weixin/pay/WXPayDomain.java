@@ -6,7 +6,7 @@ package com.weixin.pay;
  * @author yclimb
  * @date 2018/8/17
  */
-public abstract interface WxPayDomain {
+public abstract interface WXPayDomain {
     /**
      * 上报域名网络状况
      * @param domain 域名。 比如：api.mch.weixin.qq.com
@@ -23,7 +23,7 @@ public abstract interface WxPayDomain {
      * @param config 配置
      * @return 域名
      */
-    abstract DomainInfo getDomain(final WxPayConfig config);
+    abstract DomainInfo getDomain(final WXPayConfig config);
 
     static class DomainInfo{
         public String domain;       //域名

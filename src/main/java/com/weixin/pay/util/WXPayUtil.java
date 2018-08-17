@@ -1,7 +1,7 @@
 package com.weixin.pay.util;
 
-import com.weixin.pay.constants.WxPayConstants;
-import com.weixin.pay.constants.WxPayConstants.SignType;
+import com.weixin.pay.constants.WXPayConstants;
+import com.weixin.pay.constants.WXPayConstants.SignType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
@@ -28,7 +28,7 @@ import java.util.*;
  * @author yclimb
  * @date 2018/8/17
  */
-public class WxPayUtil {
+public class WXPayUtil {
 
     private static final String SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -44,7 +44,7 @@ public class WxPayUtil {
     public static Map<String, String> xmlToMap(String strXML) throws Exception {
         try {
             Map<String, String> data = new HashMap<String, String>();
-            DocumentBuilder documentBuilder = WxPayXmlUtil.newDocumentBuilder();
+            DocumentBuilder documentBuilder = WXPayXmlUtil.newDocumentBuilder();
             InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
             org.w3c.dom.Document doc = documentBuilder.parse(stream);
             doc.getDocumentElement().normalize();
@@ -63,7 +63,7 @@ public class WxPayUtil {
             }
             return data;
         } catch (Exception ex) {
-            WxPayUtil.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
+            WXPayUtil.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
             throw ex;
         }
 
@@ -77,7 +77,7 @@ public class WxPayUtil {
      * @throws Exception
      */
     public static String mapToXml(Map<String, String> data) throws Exception {
-        org.w3c.dom.Document document = WxPayXmlUtil.newDocument();
+        org.w3c.dom.Document document = WXPayXmlUtil.newDocument();
         org.w3c.dom.Element root = document.createElement("xml");
         document.appendChild(root);
         for (String key: data.keySet()) {
@@ -129,7 +129,7 @@ public class WxPayUtil {
      */
     public static String generateSignedXml(final Map<String, String> data, String key, SignType signType) throws Exception {
         String sign = generateSignature(data, key, signType);
-        data.put(WxPayConstants.FIELD_SIGN, sign);
+        data.put(WXPayConstants.FIELD_SIGN, sign);
         return mapToXml(data);
     }
 
@@ -144,10 +144,10 @@ public class WxPayUtil {
      */
     public static boolean isSignatureValid(String xmlStr, String key) throws Exception {
         Map<String, String> data = xmlToMap(xmlStr);
-        if (!data.containsKey(WxPayConstants.FIELD_SIGN) ) {
+        if (!data.containsKey(WXPayConstants.FIELD_SIGN) ) {
             return false;
         }
-        String sign = data.get(WxPayConstants.FIELD_SIGN);
+        String sign = data.get(WXPayConstants.FIELD_SIGN);
         return generateSignature(data, key).equals(sign);
     }
 
@@ -173,10 +173,10 @@ public class WxPayUtil {
      * @throws Exception
      */
     public static boolean isSignatureValid(Map<String, String> data, String key, SignType signType) throws Exception {
-        if (!data.containsKey(WxPayConstants.FIELD_SIGN) ) {
+        if (!data.containsKey(WXPayConstants.FIELD_SIGN) ) {
             return false;
         }
-        String sign = data.get(WxPayConstants.FIELD_SIGN);
+        String sign = data.get(WXPayConstants.FIELD_SIGN);
         return generateSignature(data, key, signType).equals(sign);
     }
 
@@ -205,7 +205,7 @@ public class WxPayUtil {
         Arrays.sort(keyArray);
         StringBuilder sb = new StringBuilder();
         for (String k : keyArray) {
-            if (k.equals(WxPayConstants.FIELD_SIGN)) {
+            if (k.equals(WXPayConstants.FIELD_SIGN)) {
                 continue;
             }
             if (data.get(k).trim().length() > 0) // 参数值为空，则不参与签名
@@ -213,7 +213,7 @@ public class WxPayUtil {
         }
         sb.append("key=").append(key);
         if (SignType.MD5.equals(signType)) {
-            WxPayUtil.getLogger().info("signPay=" + sb.toString());
+            WXPayUtil.getLogger().info("signPay=" + sb.toString());
             return MD5(sb.toString()).toUpperCase();
         }
         else if (SignType.HMACSHA256.equals(signType)) {

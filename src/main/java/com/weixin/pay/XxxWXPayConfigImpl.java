@@ -1,6 +1,6 @@
 package com.weixin.pay;
 
-import com.weixin.pay.constants.WxPayConstants;
+import com.weixin.pay.constants.WXPayConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -8,18 +8,18 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
- * 微信支付配置接口实现类
+ * 测试/第二个微信支付实体的微信支付实现类
  *
  * @author yclimb
- * @date 2018/8/17
+ * @date 2018/7/31
  */
-public class WxPayConfigImpl extends WxPayConfig {
+public class XxxWXPayConfigImpl extends WXPayConfig {
 
     private byte[] certData;
-    private static WxPayConfigImpl INSTANCE;
+    private static XxxWXPayConfigImpl INSTANCE;
 
-    private WxPayConfigImpl() throws Exception {
-        String certPath = WxPayConstants.APICLIENT_CERT;
+    private XxxWXPayConfigImpl() throws Exception{
+        String certPath = WXPayConstants.APICLIENT_CERT_XXX;
         File file = new File(certPath);
         InputStream certStream = new FileInputStream(file);
         this.certData = new byte[(int) file.length()];
@@ -27,11 +27,11 @@ public class WxPayConfigImpl extends WxPayConfig {
         certStream.close();
     }
 
-    public static WxPayConfigImpl getInstance() throws Exception {
+    public static XxxWXPayConfigImpl getInstance() throws Exception{
         if (INSTANCE == null) {
-            synchronized (WxPayConfigImpl.class) {
+            synchronized (XxxWXPayConfigImpl.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new WxPayConfigImpl();
+                    INSTANCE = new XxxWXPayConfigImpl();
                 }
             }
         }
@@ -40,17 +40,17 @@ public class WxPayConfigImpl extends WxPayConfig {
 
     @Override
     public String getAppID() {
-        return WxPayConstants.APP_ID;
+        return WXPayConstants.APP_ID_XXX;
     }
 
     @Override
     public String getMchID() {
-        return WxPayConstants.MCH_ID;
+        return WXPayConstants.MCH_ID_XXX;
     }
 
     @Override
     public String getKey() {
-        return WxPayConstants.API_KEY;
+        return WXPayConstants.API_KEY_XXX;
     }
 
     @Override
@@ -71,8 +71,8 @@ public class WxPayConfigImpl extends WxPayConfig {
     }
 
     @Override
-    WxPayDomain getWXPayDomain() {
-        return WxPayDomainSimpleImpl.instance();
+    WXPayDomain getWXPayDomain() {
+        return WXPayDomainSimpleImpl.instance();
     }
 
     public String getPrimaryDomain() {

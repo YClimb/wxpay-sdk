@@ -1,6 +1,6 @@
 package com.weixin.pay.util;
 
-import com.weixin.pay.constants.WxPayConstants;
+import com.weixin.pay.constants.WXPayConstants;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
@@ -15,7 +15,7 @@ import java.util.Base64;
  * @author yclimb
  * @date 2018/6/21
  */
-public class AesUtil {
+public class AESUtil {
 
     /**
      * 密钥算法
@@ -34,7 +34,7 @@ public class AesUtil {
 
     static {
         try {
-            KEY = new SecretKeySpec(WxPayUtil.MD5(WxPayConstants.API_KEY).toLowerCase().getBytes(), ALGORITHM);
+            KEY = new SecretKeySpec(WXPayUtil.MD5(WXPayConstants.API_KEY).toLowerCase().getBytes(), ALGORITHM);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,7 +113,7 @@ public class AesUtil {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        System.out.println(AesUtil.decryptData(A));
+        System.out.println(AESUtil.decryptData(A));
 
         /*String B = AESUtil.decryptData(A);
         System.out.println(B);*/

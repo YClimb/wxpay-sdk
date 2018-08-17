@@ -6,7 +6,7 @@ package com.weixin.pay.constants;
  * @author yclimb
  * @date 2018/8/6
  */
-public enum WxPayCodeEnum {
+public enum WXPayCodeEnum {
 
     /**
      * 余额不足
@@ -16,7 +16,7 @@ public enum WxPayCodeEnum {
     private String code;
     private String des;
 
-    WxPayCodeEnum(String code, String des) {
+    WXPayCodeEnum(String code, String des) {
         this.code = code;
         this.des = des;
     }

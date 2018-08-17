@@ -1,6 +1,6 @@
 package com.weixin.pay;
 
-import com.weixin.pay.constants.WxPayConstants;
+import com.weixin.pay.constants.WXPayConstants;
 import org.apache.http.conn.ConnectTimeoutException;
 
 import java.net.UnknownHostException;
@@ -13,15 +13,15 @@ import java.util.Map;
  * @author yclimb
  * @date 2018/8/17
  */
-public class WxPayDomainSimpleImpl implements WxPayDomain {
-    private WxPayDomainSimpleImpl() {
+public class WXPayDomainSimpleImpl implements WXPayDomain {
+    private WXPayDomainSimpleImpl() {
     }
 
     private static class WxpayDomainHolder {
-        private static WxPayDomain holder = new WxPayDomainSimpleImpl();
+        private static WXPayDomain holder = new WXPayDomainSimpleImpl();
     }
 
-    public static WxPayDomain instance() {
+    public static WXPayDomain instance() {
         return WxpayDomainHolder.holder;
     }
 
@@ -54,35 +54,35 @@ public class WxPayDomainSimpleImpl implements WxPayDomain {
     }
 
     @Override
-    public synchronized DomainInfo getDomain(final WxPayConfig config) {
-        DomainStatics primaryDomain = domainData.get(WxPayConstants.DOMAIN_API);
+    public synchronized DomainInfo getDomain(final WXPayConfig config) {
+        DomainStatics primaryDomain = domainData.get(WXPayConstants.DOMAIN_API);
         if (primaryDomain == null ||
                 primaryDomain.isGood()) {
-            return new DomainInfo(WxPayConstants.DOMAIN_API, true);
+            return new DomainInfo(WXPayConstants.DOMAIN_API, true);
         }
 
         long now = System.currentTimeMillis();
         if (switchToAlternateDomainTime == 0) {
             // first switch
             switchToAlternateDomainTime = now;
-            return new DomainInfo(WxPayConstants.DOMAIN_API2, false);
+            return new DomainInfo(WXPayConstants.DOMAIN_API2, false);
         } else if (now - switchToAlternateDomainTime < MIN_SWITCH_PRIMARY_MSEC) {
-            DomainStatics alternateDomain = domainData.get(WxPayConstants.DOMAIN_API2);
+            DomainStatics alternateDomain = domainData.get(WXPayConstants.DOMAIN_API2);
             if (alternateDomain == null ||
                     alternateDomain.isGood() ||
                     alternateDomain.badCount() < primaryDomain.badCount()) {
-                return new DomainInfo(WxPayConstants.DOMAIN_API2, false);
+                return new DomainInfo(WXPayConstants.DOMAIN_API2, false);
             } else {
-                return new DomainInfo(WxPayConstants.DOMAIN_API, true);
+                return new DomainInfo(WXPayConstants.DOMAIN_API, true);
             }
         } else {  //force switch back
             switchToAlternateDomainTime = 0;
             primaryDomain.resetCount();
-            DomainStatics alternateDomain = domainData.get(WxPayConstants.DOMAIN_API2);
+            DomainStatics alternateDomain = domainData.get(WXPayConstants.DOMAIN_API2);
             if (alternateDomain != null) {
                 alternateDomain.resetCount();
             }
-            return new DomainInfo(WxPayConstants.DOMAIN_API, true);
+            return new DomainInfo(WXPayConstants.DOMAIN_API, true);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.weixin.pay.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.weixin.pay.constants.WxPayConstants;
+import com.weixin.pay.constants.WXPayConstants;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -25,7 +25,7 @@ import java.util.UUID;
  * @author yclimb
  * @date 2018/8/17
  */
-public class WxSignatureUtil {
+public class WXSignatureUtil {
 	
 	/**
 	 * 获取微信签名信息
@@ -47,8 +47,8 @@ public class WxSignatureUtil {
 			return (Map<String, Object>) objMap;
 		}
 
-		String appid = WxPayConstants.APP_ID;
-		String secret = WxPayConstants.SECRET;
+		String appid = WXPayConstants.APP_ID;
+		String secret = WXPayConstants.SECRET;
 		String token;
 		String jsapi_ticket;
 
@@ -78,7 +78,7 @@ public class WxSignatureUtil {
 				"&noncestr=" + nonce_str +
 				"&timestamp=" + timestamp +
 				"&url=" + requestUrl;
-		WxPayUtil.getLogger().info(string1);
+		WXPayUtil.getLogger().info(string1);
 
 		try {
 			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
@@ -130,7 +130,7 @@ public class WxSignatureUtil {
 	 */
 	public static String getToken(String appid,String secret) throws IOException, CloneNotSupportedException{
 		String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+secret;
-		WxPayUtil.getLogger().info("url:" + url);
+		WXPayUtil.getLogger().info("url:" + url);
 		// 生成一个请求对象
 		HttpGet httpGet = new HttpGet(url);
 		// 生成一个Http客户端对象
@@ -217,8 +217,8 @@ public class WxSignatureUtil {
 	 * @throws 
 	 */
 	public static String getPhotoWeixinUrl(String media_id) throws NoSuchAlgorithmException, IOException, CloneNotSupportedException{
-		String appid = WxPayConstants.APP_ID;
-		String secret = WxPayConstants.SECRET;
+		String appid = WXPayConstants.APP_ID;
+		String secret = WXPayConstants.SECRET;
 		String token = getToken(appid,secret);
         String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=" + token + "&media_id=" + media_id;
         return url;
