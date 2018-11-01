@@ -11,7 +11,15 @@ public enum RedisKeyEnum {
     /**
      * 生成带参数的小程序二维码KEY
      */
-    XXX_MINI_WX_CODE(RedisKeyUtil.KEY_PREFIX, "mini", "getwxacodeunlimit", "生成永久无限制微信二维码")
+    XXX_MINI_WX_CODE(RedisKeyUtil.KEY_PREFIX, "mini", "getwxacodeunlimit", "生成永久无限制微信二维码"),
+    /**
+     * 获取卡券api_ticket
+     */
+    IMALL_WXCARD_APITICKET(RedisKeyUtil.KEY_PREFIX, "jsapi", "getWxCardApiTicket", "获取卡券api_ticket的api"),
+    /**
+     * 获取卡券api_ticket
+     */
+    IMALL_WX_APITICKET(RedisKeyUtil.KEY_PREFIX, "jsapi", "getWxApiTicket", "获取api_ticket的api")
 
     ;
 

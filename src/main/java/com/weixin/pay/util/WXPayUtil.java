@@ -116,7 +116,7 @@ public class WXPayUtil {
      * @return 含有sign字段的XML
      */
     public static String generateSignedXml(final Map<String, String> data, String key) throws Exception {
-        return generateSignedXml(data, key, SignType.MD5);
+        return generateSignedXml(data, key, WXPayConstants.SignType.MD5);
     }
 
     /**
@@ -238,6 +238,44 @@ public class WXPayUtil {
         return new String(nonceChars);
     }
 
+    /**
+     * 根据字典排序
+     * @param type 1:根据key键排序;2:根据value值排序
+     * @param data d
+     * @return sb
+     */
+    public static String dictionaryOrder(final Map<String, String> data, int type) {
+        Set<String> keySet = data.keySet();
+        String[] keyArray = keySet.toArray(new String[keySet.size()]);
+        StringBuilder sb = new StringBuilder();
+        if (type == 2) {
+            String[] valArray = new String[keySet.size()];
+            for (int i = 0; i < keySet.size(); i++) {
+                valArray[i] = data.get(keyArray[i]);
+            }
+            Arrays.sort(valArray);
+            for (String v : valArray) {
+                // 参数值为空，则不参与签名
+                if (v.trim().length() > 0) {
+                    sb.append(v);
+                }
+            }
+        } else {
+            Arrays.sort(keyArray);
+            for (int i = 0; i < keyArray.length; i++) {
+                // 参数值为空，则不参与签名
+                if (data.get(keyArray[i]).trim().length() > 0) {
+                    if (i == keyArray.length - 1) {
+                        sb.append(keyArray[i]).append("=").append(data.get(keyArray[i]).trim());
+                    } else {
+                        sb.append(keyArray[i]).append("=").append(data.get(keyArray[i]).trim()).append("&");
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+
 
     /**
      * 生成 MD5
@@ -260,7 +298,7 @@ public class WXPayUtil {
      * @param data 待处理数据
      * @param key 密钥
      * @return 加密结果
-     * @throws Exception
+     * @throws Exception e
      */
     public static String HMACSHA256(String data, String key) throws Exception {
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
@@ -275,8 +313,34 @@ public class WXPayUtil {
     }
 
     /**
+     * SHA1 安全加密算法
+     * @param data 待处理数据
+     * @return str
+     * @throws Exception e
+     */
+    public static String SHA1(String data) throws Exception {
+        //指定sha1算法
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.update(data.getBytes("UTF-8"));
+        //获取字节数组
+        byte messageDigest[] = digest.digest();
+        // Create Hex String
+        StringBuilder hexString = new StringBuilder();
+        // 字节数组转换为 十六进制 数
+        for (int i = 0; i < messageDigest.length; i++) {
+            String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+            if (shaHex.length() < 2) {
+                hexString.append(0);
+            }
+            hexString.append(shaHex);
+        }
+        return hexString.toString();
+
+    }
+
+    /**
      * 日志
-     * @return
+     * @return log
      */
     public static Logger getLogger() {
         return LoggerFactory.getLogger("wxpay java sdk");
@@ -284,15 +348,15 @@ public class WXPayUtil {
 
     /**
      * 获取当前时间戳，单位秒
-     * @return
+     * @return long
      */
     public static long getCurrentTimestamp() {
-        return System.currentTimeMillis()/1000;
+        return System.currentTimeMillis() / 1000;
     }
 
     /**
      * 获取当前时间戳，单位毫秒
-     * @return
+     * @return long
      */
     public static long getCurrentTimestampMs() {
         return System.currentTimeMillis();
@@ -300,10 +364,22 @@ public class WXPayUtil {
 
     /**
      * 生成 uuid， 即用来标识一笔单，也用做 nonce_str
-     * @return
+     * @return str
      */
     public static String generateUUID() {
         return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
     }
 
+    /**
+     * 通用商户单号（每个单号必须唯一）28位
+     * 组成：mch_id+yyyyMMddHHmmss+4位随机数
+     *
+     * @author yclimb
+     * @date 2018/9/18
+     */
+    public static String getPayNo() {
+        String yyyyMMddHHmmss = DateTimeUtil.getTimeShortString(new Date());
+        int str4 = (int) (Math.random() * 9000) + 1000;
+        return WXPayConstants.MCH_ID + yyyyMMddHHmmss + str4;
+    }
 }

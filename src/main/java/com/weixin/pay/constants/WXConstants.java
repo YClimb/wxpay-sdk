@@ -30,6 +30,11 @@ public class WXConstants {
     public static final String OAUTH_STATE = "xxx";
 
     /**
+     * 小程序获取 access token code
+     */
+    public static final String WX_MINI_PROGRAM_CODE = "xxxx";
+
+    /**
      * 微信全局accessToken
      */
     public static final String WECHAT_ACCESSTOKEN = OAUTH_STATE + ":wx:accessToken:";

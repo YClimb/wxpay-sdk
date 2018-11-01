@@ -4,9 +4,6 @@ import org.apache.http.client.HttpClient;
 
 /**
  * 微信支付SDK常量
- *
- * @author yclimb
- * @date 2018/8/17
  */
 public class WXPayConstants {
 
@@ -24,7 +21,7 @@ public class WXPayConstants {
      * 微信签名枚举类型
      */
     public enum SignType {
-        MD5, HMACSHA256
+        MD5, HMACSHA256, SHA1
     }
 
     /**
@@ -64,9 +61,9 @@ public class WXPayConstants {
      * JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付，统一下单接口trade_type的传参可参考这里
      * MICROPAY--刷卡支付，刷卡支付有单独的支付接口，不调用统一下单接口
      */
-    public static String TRADE_TYPE =  "JSAPI";
-    public static String TRADE_TYPE_APP =  "APP";
-    public static String TRADE_TYPE_NATIVE =  "NATIVE";
+    public static final String TRADE_TYPE =  "JSAPI";
+    public static final String TRADE_TYPE_APP =  "APP";
+    public static final String TRADE_TYPE_NATIVE =  "NATIVE";
 
     /**
      * 微信 - API域名地址
@@ -133,6 +130,29 @@ public class WXPayConstants {
      * 其他：需要证书
      */
     public static final String SENDREDPACK_URL_SUFFIX = "/mmpaymkttransfers/sendredpack";
+    /**
+     * 作用：商户平台-现金红包-查询红包记录<br>
+     * 场景：用于商户对已发放的红包进行查询红包的具体信息，可支持普通红包和裂变包。
+     * 其他：需要证书
+     */
+    public static final String GETHBINFO_URL_SUFFIX = "/mmpaymkttransfers/gethbinfo";
+    /**
+     * 作用：商户平台-代金券或立减优惠-发放代金券<br>
+     * 场景：用于商户主动调用接口给用户发放代金券的场景，已做防小号处理，给小号发放代金券将返回错误码。
+     * 注意：通过接口发放的代金券不会进入微信卡包
+     * 其他：请求需要双向证书
+     */
+    public static final String SEND_COUPON_URL_SUFFIX = "/mmpaymkttransfers/send_coupon";
+    /**
+     * 作用：商户平台-代金券或立减优惠-查询代金券信息<br>
+     * 场景：查询代金券信息。
+     */
+    public static final String QUERYCOUPONSINFO_URL_SUFFIX = "/mmpaymkttransfers/querycouponsinfo";
+    /**
+     * 作用：商户平台-代金券或立减优惠-查询代金券批次<br>
+     * 场景：查询代金券批次信息。
+     */
+    public static final String QUERY_COUPON_STOCK_URL_SUFFIX = "/mmpaymkttransfers/query_coupon_stock";
     /**
      * 作用：提交刷卡支付<br>
      * 场景：刷卡支付
@@ -210,7 +230,7 @@ public class WXPayConstants {
     public static final String SANDBOX_ORDERQUERY_URL_SUFFIX   = "/sandboxnew/pay/orderquery";
     public static final String SANDBOX_REVERSE_URL_SUFFIX      = "/sandboxnew/secapi/pay/reverse";
     public static final String SANDBOX_CLOSEORDER_URL_SUFFIX   = "/sandboxnew/pay/closeorder";
-    public static final String SANDBOX_REFUND_URL_SUFFIX       = "/sandboxnew/secapi/pay/refund";
+    public static final String SANDBOX_REFUND_URL_SUFFIX       = "/sandboxnew/pay/refund";
     public static final String SANDBOX_REFUNDQUERY_URL_SUFFIX  = "/sandboxnew/pay/refundquery";
     public static final String SANDBOX_DOWNLOADBILL_URL_SUFFIX = "/sandboxnew/pay/downloadbill";
     public static final String SANDBOX_REPORT_URL_SUFFIX       = "/sandboxnew/payitil/report";
@@ -218,6 +238,11 @@ public class WXPayConstants {
     public static final String SANDBOX_AUTHCODETOOPENID_URL_SUFFIX = "/sandboxnew/tools/authcodetoopenid";
     public static final String SANDBOX_SENDREDPACK_URL_SUFFIX  = "/sandboxnew/mmpaymkttransfers/sendredpack";
     public static final String SANDBOX_TRANSFERS_URL_SUFFIX    = "/sandboxnew/mmpaymkttransfers/promotion/transfers";
+    public static final String SANDBOX_GETHBINFO_URL_SUFFIX    = "/sandboxnew/mmpaymkttransfers/promotion/gethbinfo";
+    public static final String SANDBOX_SEND_COUPON_URL_SUFFIX = "/sandboxnew/mmpaymkttransfers/send_coupon";
+    public static final String SANDBOX_QUERYCOUPONSINFO_URL_SUFFIX = "/sandboxnew/mmpaymkttransfers/querycouponsinfo";
+    public static final String SANDBOX_QUERY_COUPON_STOCK_URL_SUFFIX = "/sandboxnew/mmpaymkttransfers/query_coupon_stock";
+
 
 }
 
