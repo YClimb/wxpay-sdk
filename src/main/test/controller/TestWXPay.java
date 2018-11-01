@@ -70,8 +70,8 @@ public class TestWXPay {
      */
     private void doUnifiedOrder() throws Exception {
         WXPay wxPay = new WXPay(WXPayConfigImpl.getInstance());
-        Map<String, String> resultMap = wxPay.unifiedOrder("https://api.uat.iyuedian.com/iyd-imall-manage/imall/v1/weixin/pay/wxnotify",
-                "oPR7T5PFjcfgugIu2abQG6ijQGV4", "悦店-测试商品", WXPayUtil.getPayNo(), "10.01", "127.0.0.1",
+        Map<String, String> resultMap = wxPay.unifiedOrder("https://xxx.com/v1/weixin/pay/wxnotify",
+                "oPR7T5PFjcfgugIu2abQG6ijQGV4", "xxx-测试商品", WXPayUtil.getPayNo(), "10.01", "127.0.0.1",
                 "vip", "",null,null);
 
         String prepay_id = resultMap.get("prepay_id");

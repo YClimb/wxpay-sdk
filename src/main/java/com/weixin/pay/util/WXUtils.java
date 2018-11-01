@@ -7,7 +7,6 @@ import com.weixin.pay.card.CardBgColorEnum;
 import com.weixin.pay.constants.WXConstants;
 import com.weixin.pay.constants.WXPayConstants;
 import com.weixin.pay.constants.WXURL;
-import com.weixin.pay.constants.WeChatURL;
 import com.weixin.pay.redis.RedisKeyEnum;
 import com.weixin.pay.redis.RedisKeyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -311,7 +310,7 @@ public class WXUtils {
                 return resultJson;
             }
 
-            // 获取[爱上悦店]公众号的 access_token
+            // 获取[商户名称]公众号的 access_token
             String accessToken = this.getAccessToken(WXConstants.WX_MINI_PROGRAM_CODE);
 
             // 调用接口传入参数
@@ -375,7 +374,7 @@ public class WXUtils {
 
             // 请求微信接口，得到返回结果[json]
             HttpEntity<JSONObject> entity = new HttpEntity<>(paramJson, this.getHttpHeadersUTF8JSON());
-            JSONObject resultJson = restTemplate.postForObject(WeChatURL.WX_CARD_ACTIVITY_CREATE_URL, entity, JSONObject.class, accessToken);
+            JSONObject resultJson = restTemplate.postForObject(WXURL.WX_CARD_ACTIVITY_CREATE_URL, entity, JSONObject.class, accessToken);
 
             // {"errcode":0,"errmsg":"ok","activity_id":"4728935"}
             System.out.println(resultJson.toJSONString());
@@ -456,7 +455,7 @@ public class WXUtils {
             }
 
             // 获取卡券 api_ticket
-            String api_ticket = restTemplate.getForObject(WeChatURL.BASE_API_TICKET, String.class, access_token);
+            String api_ticket = restTemplate.getForObject(WXURL.BASE_API_TICKET, String.class, access_token);
             WXPayUtil.getLogger().info("getWxCardApiTicket:api_ticket:{}", api_ticket);
             if (StringUtils.isBlank(api_ticket)) {
                 return null;
@@ -502,7 +501,7 @@ public class WXUtils {
             }
 
             // 获取 api_ticket
-            String api_ticket = restTemplate.getForObject(WeChatURL.BASE_JSAPI_TICKET, String.class, access_token);
+            String api_ticket = restTemplate.getForObject(WXURL.BASE_JSAPI_TICKET, String.class, access_token);
             WXPayUtil.getLogger().info("getWxApiTicket:api_ticket:{}", api_ticket);
             if (StringUtils.isBlank(api_ticket)) {
                 return null;
@@ -537,7 +536,7 @@ public class WXUtils {
         }
         try {
 
-            // 获取[爱上悦店]公众号的 access_token
+            // 获取[商户名称]公众号的 access_token
             String accessToken = this.getAccessToken(WXConstants.WX_MINI_PROGRAM_CODE);
             String timestamp = String.valueOf(WXPayUtil.getCurrentTimestamp());
             String nonce_str = WXPayUtil.generateNonceStr();

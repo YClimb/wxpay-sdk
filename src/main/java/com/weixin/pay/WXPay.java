@@ -1138,7 +1138,7 @@ public class WXPay {
         // 商户订单号	 mch_billno	是	10000098201411111234567890	String(28) 商户订单号（每个订单号必须唯一。取值范围：0~9，a~z，A~Z）接口根据商户订单号支持重入，如出现超时可再调用。
         data.put("mch_billno", mch_billno);
         // 商户名称	send_name	是	天虹百货	String(32)	红包发送者名称
-        data.put("send_name", "悦店");
+        data.put("send_name", "商户名称");
         // 用户openid	re_openid	是	oxTWIuGaIt6gTKsQRLau2M0yL16E	String(32) 接受红包的用户openid openid为用户在wxappid下的唯一标识（获取openid参见微信公众平台开发者文档：网页授权获取用户基本信息）
         data.put("re_openid", openid);
         // 付款金额	total_amount	是	1000	int	付款金额，单位分
