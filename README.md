@@ -3,7 +3,11 @@
 
 本项目依托于 [微信支付开发者文档](https://pay.weixin.qq.com/wiki/doc/api/index.html)，对文档中的接口进行二次封装，从而为小伙伴们提供一个`拿来即用`的支付sdk工具。
 
-相关的sdk文档已经更新，请进入以下地址查看：https://github.com/YClimb/wxpay-gitbook
+相关的sdk文档已经更新，请进入以下地址查看：
+
+文档地址：https://yclimb.gitbook.io/wxpay
+gitbook：https://github.com/YClimb/wxpay-gitbook
+
 
 ## 项目结构
 首先需要简单说明整个 `wxpay-sdk` 的项目结构，主体结构如下所示：
