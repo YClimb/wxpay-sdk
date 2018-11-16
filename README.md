@@ -155,6 +155,13 @@ public Map<String, String> saveWxPayUnifiedOrder(Payment payment, User user) thr
 基础调用方式如上所述，统一返回值为 `Map<String, String>`，详细信息见实体类，文档会实时更新，尽情期待！！！
     
     
+关注作者微信公众号，点击下方`讨论群`，扫码即可加入`微信支付讨论群`与小伙伴一起探讨哦～
+---
+
+![关注我的公众号](https://img-blog.csdn.net/20180130111432962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvWUNsaW1i/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+---
+
 
 
 ## License
