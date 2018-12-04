@@ -477,7 +477,7 @@ public class WXUtils {
     }
 
     /**
-     * 获取卡券 api_ticket 的 api
+     * 获取 jsapi_ticket
      * 请求路径：https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type=jsapi
      *
      * @param access_token token
