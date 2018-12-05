@@ -1,7 +1,7 @@
 微信支付 Java SDK
 ------
 
-2018最新最全微信支付集成SDK，一行代码调用微信支付，更多丰富接口注释和例子，包含基础支付功能（网页授权、各种签名、统一下单、退款、对账单、用户信息获取）、验收用例指引（沙箱支付、支付验收、免充值产品开通）、商户平台（现金红包、代金券或立减优惠）、公众平台（微信卡券、社交立减金活动）、小程序（生成永久二维码、发送模版消息）等等功能。
+2018最新最全微信支付集成SDK，一行代码调用微信支付，更多丰富接口注释和例子，包含基础支付功能（网页授权、各种签名、统一下单、退款、对账单、用户信息获取）、验收用例指引（沙箱支付、支付验收、免充值产品开通）、商户平台（现金红包、企业付款到用户、代金券或立减优惠）、公众平台（微信卡券、社交立减金活动）、小程序（生成永久二维码、发送模版消息）等等功能。
 
 本项目依托于 [微信支付开发者文档](https://pay.weixin.qq.com/wiki/doc/api/index.html)，对文档中的接口进行二次封装，从而为小伙伴们提供一个`拿来即用`的支付sdk工具。
 
@@ -36,7 +36,7 @@ gitbook：https://github.com/YClimb/wxpay-gitbook
 
 
 提供微信支付的基础功能，脱胎于微信官方Java-SDK，进行二次封装后，提供一系列的方法；
-基础方法主要在 `com.weixin.pay.WXPay` 类下，此项目包含的微信支付功能主要分为以下几个部分：
+基础方法主要在 `com.weixin.pay.WXPay` 、 `com.weixin.pay.util.WXUtils`类下，此项目包含的微信支付功能主要分为以下几个部分，这里列举一些主要功能，具体的详细功能查询作者gitbook或者公众号查看。
 
 ### 1. 基础支付功能
 
@@ -100,10 +100,8 @@ gitbook：https://github.com/YClimb/wxpay-gitbook
  |方法名 | 说明 |
  |--------|--------|
  |getAccessToken| 获取微信全局accessToken |
- |getMiniBaseUserInfo| 获取小程序静默登录返回信息 |
  |getJsapiAccessTokenByCode| 网页授权获取用户信息时用于获取access_token以及openid |
  |getJsapiUserinfo| 通过access_token和openid请求获取用户信息 |
- |getWxMiniQRImg| 生成带参数的小程序二维码[] |
  |getWxCardApiTicket| 获取卡券 api_ticket 的 api |
  |getWxApiTicket| 获取卡券 api_ticket 的 api |
 
@@ -117,7 +115,29 @@ gitbook：https://github.com/YClimb/wxpay-gitbook
  |createCardActivity| 创建支付后领取立减金活动接口 |
 
 
+### 7. 小程序
+
+ `com.weixin.pay.util.WXUtils` ：
+ 
+ |方法名 | 说明 |
+ |--------|--------|
+ |getMiniBaseUserInfo| 获取小程序静默登录返回信息 |
+ |getWxMiniQRImg| 生成带参数的小程序二维码[] |
+
 ## 微信支付调用示例
+
+具体示例及文章可以查看作者的sdk文档，地址如下：
+
+文档地址：https://yclimb.gitbook.io/wxpay
+
+或者在本文末扫码关注作者微信公众号，加作者微信&加入讨论群与大家一起讨论。
+
+ `微信公众号网页授权` ：
+```$xslt
+https://yclimb.gitbook.io/wxpay/pay/authorize
+```
+
+ `统一下单接口` ：
 
 ```$xslt
 public Map<String, String> saveWxPayUnifiedOrder(Payment payment, User user) throws Exception {
@@ -153,6 +173,22 @@ public Map<String, String> saveWxPayUnifiedOrder(Payment payment, User user) thr
     return wxPay.chooseWXPayMap(prepay_id, nonce_str);
 }
 ```
+
+ `支付结果通知` ：
+```$xslt
+https://yclimb.gitbook.io/wxpay/pay/wxnotify
+```
+
+ `查询订单和关闭订单` ：
+```$xslt
+https://yclimb.gitbook.io/wxpay/pay/orderquery
+```
+
+ `申请退款、退款回调接口、查询退款` ：
+```$xslt
+https://yclimb.gitbook.io/wxpay/refund/refund
+```
+
 
     
 基础调用方式如上所述，统一返回值为 `Map<String, String>`，详细信息见实体类，文档会实时更新，尽情期待！！！
